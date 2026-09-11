@@ -1,0 +1,36 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Python bytecode and test caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Project directories not required inside app container
+ansible/
+docs/
+logs/
+monitoring/
+runbooks/
+scripts/
+terraform/
+
+# Docker build files
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# OS & Log artifacts
+*.log
+.DS_Store

@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Job 1: Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Job 2: Flask Self-Healing Application metrics
+  - job_name: "flask-app"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["self-healing-app:8080"]
+
+  # Job 3: Node Exporter host metrics
+  - job_name: "node-exporter"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["node-exporter:9100"]
