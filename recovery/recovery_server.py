@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
+from pathlib import Path
 import subprocess
 
 app = Flask(__name__)
 
-RECOVERY_SCRIPT = "/home/user/devops-projects/self-healing-platform/scripts/recover-app.sh"
-
+#RECOVERY_SCRIPT = "/home/user/devops-projects/self-healing-platform/scripts/recover-app.sh"
+BASE_DIR = Path(__file__).resolve().parent.parent
+RECOVERY_SCRIPT = BASE_DIR / "scripts" / "recover-app.sh"
 
 @app.route("/recover", methods=["POST"])
 def recover():

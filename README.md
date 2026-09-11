@@ -3,7 +3,7 @@
 A production-style DevOps/SRE project demonstrating automated application recovery, container health checks, infrastructure monitoring, metrics collection, Grafana visualization, and CI automation.
 
 ## 🚀 Project Overview
-
+> 📘 **Installation & Testing Guide:** See [docs/INSTALLATION.md](docs/INSTALLATION.md) for complete clone, infrastructure setup, deployment, monitoring, failure injection, and automatic recovery instructions.
 This project runs a Flask web application inside Docker and automatically recovers from unexpected application process failures.
 
 The platform includes:

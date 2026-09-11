@@ -4,7 +4,17 @@ set -euo pipefail
 
 CONTAINER="self-healing-app"
 
-if docker inspect -f '{{.State.Running}}' "$CONTAINER" 2>/dev/null | grep -q "true"; then
+if ! command -v docker >/dev/null 2>&1; then
+    echo "$(date -Is) - ERROR: Docker is not installed or not in PATH"
+    exit 1
+fi
+
+if ! docker inspect "$CONTAINER" >/dev/null 2>&1; then
+    echo "$(date -Is) - ERROR: Container '$CONTAINER' does not exist"
+    exit 1
+fi
+
+if docker inspect -f '{{.State.Running}}' "$CONTAINER" | grep -q "true"; then
     echo "$(date -Is) - $CONTAINER is already running"
     exit 0
 fi
