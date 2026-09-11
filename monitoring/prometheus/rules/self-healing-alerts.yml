@@ -1,0 +1,12 @@
+groups:
+  - name: self-healing-platform
+    rules:
+      - alert: ApplicationDown
+        expr: up{job="flask-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: self-healing-app
+        annotations:
+          summary: "Self-healing application is down"
+          description: "The Flask application has been unreachable for more than 1 minute."
