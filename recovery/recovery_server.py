@@ -13,24 +13,39 @@ def recover():
     print("Received Alertmanager webhook")
     print(data)
 
-    result = subprocess.run(
-        [RECOVERY_SCRIPT],
-        capture_output=True,
-        text=True
-    )
+    alerts = data.get("alerts", [])
 
-    print(result.stdout)
+    for alert in alerts:
+        status = alert.get("status")
+        alertname = alert.get("labels", {}).get("alertname")
 
-    if result.returncode != 0:
-        print(result.stderr)
-        return jsonify({
-            "status": "failed",
-            "message": "Recovery script failed"
-        }), 500
+        print(f"Alert: {alertname}, Status: {status}")
+
+        # Recover only when our ApplicationDown alert is firing.
+        if alertname == "ApplicationDown" and status == "firing":
+            result = subprocess.run(
+                [RECOVERY_SCRIPT],
+                capture_output=True,
+                text=True
+            )
+
+            print(result.stdout)
+
+            if result.returncode != 0:
+                print(result.stderr)
+                return jsonify({
+                    "status": "failed",
+                    "message": "Recovery script failed"
+                }), 500
+
+            return jsonify({
+                "status": "success",
+                "message": "Application recovery executed"
+            }), 200
 
     return jsonify({
-        "status": "success",
-        "message": "Recovery script executed"
+        "status": "ignored",
+        "message": "No actionable ApplicationDown firing alert found"
     }), 200
 
 
