@@ -1,0 +1,43 @@
+from flask import Flask, request, jsonify
+import subprocess
+
+app = Flask(__name__)
+
+RECOVERY_SCRIPT = "/home/user/devops-projects/self-healing-platform/scripts/recover-app.sh"
+
+
+@app.route("/recover", methods=["POST"])
+def recover():
+    data = request.get_json(silent=True) or {}
+
+    print("Received Alertmanager webhook")
+    print(data)
+
+    result = subprocess.run(
+        [RECOVERY_SCRIPT],
+        capture_output=True,
+        text=True
+    )
+
+    print(result.stdout)
+
+    if result.returncode != 0:
+        print(result.stderr)
+        return jsonify({
+            "status": "failed",
+            "message": "Recovery script failed"
+        }), 500
+
+    return jsonify({
+        "status": "success",
+        "message": "Recovery script executed"
+    }), 200
+
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "healthy"})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001)

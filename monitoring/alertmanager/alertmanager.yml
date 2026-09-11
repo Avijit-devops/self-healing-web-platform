@@ -2,7 +2,10 @@ global:
   resolve_timeout: 5m
 
 route:
-  receiver: "default"
+  receiver: "recovery-webhook"
 
 receivers:
-  - name: "default"
+  - name: "recovery-webhook"
+    webhook_configs:
+      - url: "http://host.docker.internal:5001/recover"
+        send_resolved: false
